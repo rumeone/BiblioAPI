@@ -23,7 +23,26 @@ class ReaderController {
             return res.json({reader});
         } catch (e) {
             console.log(e.message);
-            return res.status(400).json({message: 'User change error'});
+            return res.status(400).json({message: 'Reader change error'});
+        }
+    }
+
+    async deleteReader(req,res) {
+        try {
+            const reader = await Reader.findByPk(req.body.id);
+            const {fullName, birth} = await Reader.findByPk(req.body.id);
+            if (!reader) {
+                return res.status(400).json({message: 'Reader does not exist'});
+            }
+            await reader.destroy({
+                where: {
+                    id: req.body.id
+                }
+            });
+            return res.json(`Пользователь ${fullName} удален`);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Error deleting user'});
         }
     }
 }
