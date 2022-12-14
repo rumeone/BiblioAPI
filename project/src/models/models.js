@@ -7,7 +7,7 @@ const Book = sequelize.define('book', {
     title: {type: DataTypes.STRING, allowNull: false},
     author: {type: DataTypes.STRING, allowNull: false},
     vendorCode: {type: DataTypes.INTEGER, allowNull: false},
-    year: {type: DataTypes.INTEGER, allowNull: false},
+    year: {type: DataTypes.DATEONLY, allowNull: false},
     numberOfCopies: {type: DataTypes.INTEGER}
 });
 
