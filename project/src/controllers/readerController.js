@@ -34,7 +34,6 @@ class ReaderController {
     async deleteReader(req,res) {
         try {
             const reader = await Reader.findByPk(req.body.id);
-            const {fullName, birth} = await Reader.findByPk(req.body.id);
             if (!reader) {
                 return res.status(400).json({message: 'Reader does not exist'});
             }
@@ -43,7 +42,7 @@ class ReaderController {
                     id: req.body.id
                 }
             });
-            return res.json(`Пользователь ${fullName} удален`);
+            return res.json(`The user ${reader.fullName} has been removed`);
         } catch (e) {
             console.log(e.message);
             return res.status(400).json({message: 'Error deleting user'});
