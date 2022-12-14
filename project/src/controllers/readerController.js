@@ -4,11 +4,15 @@ class ReaderController {
     async createReader(req, res) {
         try {
             const {fullName, birth} = req.body;
+            if(!fullName || !birth) {
+                console.log("Reader creation error");
+                res.status(400).json({message: 'No data'});
+            }
             const reader = await Reader.create({fullName, birth});
 
             return res.json({reader});
         } catch (e) {
-            console.log("user creation error: ", e.message)
+            console.log("Reader creation error: ", e.message)
             res.status(400).json({message: 'Creation error'});
         }
     };
@@ -44,7 +48,7 @@ class ReaderController {
             console.log(e.message);
             return res.status(400).json({message: 'Error deleting user'});
         }
-    }
+    };
 }
 
 module.exports = new ReaderController();
