@@ -50,7 +50,22 @@ class BookController {
             console.log(e.message);
             return res.status(400).json({message: 'Error deleting a book'});
         }
+    };
 
+    async getBookData(req, res) {
+        try {
+            const {id} = req.params;
+            const book = await Book.findOne({
+                where: {id: id}
+            });
+            if(!book) {
+                return res.status(400).json({message: 'Book does not exist'});
+            }
+            return res.json(book);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Book data retrieval error'});
+        }
     }
 }
 
