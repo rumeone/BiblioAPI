@@ -59,13 +59,8 @@ class ReaderController {
             if (!reader || !book) {
                 return res.status(400).json({message: 'Reader does not exist'});
             }
-            const nameBook = await Book.findOne({
-                where: {
-                    id: idBook
-                }
-            });
             reader.addBooks(idBook);
-            return res.json(`Reader with id = ${idReader} book added ${nameBook.title}`)
+            return res.json(`Reader with id = ${idReader} book added ${book.title}`)
         } catch (e) {
             console.log(e.message);
             return res.status(400).json({message: 'Error issuing a book to a reader'});
