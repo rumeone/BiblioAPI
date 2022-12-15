@@ -11,7 +11,7 @@ app.use('/api', router)
 const start = async() => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({alter: true})
+        await sequelize.sync({alter: true});
         app.listen(process.env.PORT, () => {
             console.log(`Server has been started on port ${process.env.PORT}`);
         });

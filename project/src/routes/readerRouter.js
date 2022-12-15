@@ -5,5 +5,6 @@ const readerController = require('../controllers/readerController');
 router.post('/create', readerController.createReader);
 router.put('/update', readerController.changeReader);
 router.delete('/delete', readerController.deleteReader);
+router.post('/issueBook', readerController.issueBook);
 
 module.exports = router;
