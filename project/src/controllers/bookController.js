@@ -52,7 +52,7 @@ class BookController {
         }
     };
 
-    async getBookData(req, res) {
+    async getBookDataById(req, res) {
         try {
             const {id} = req.params;
             const book = await Book.findOne({
@@ -66,6 +66,29 @@ class BookController {
             console.log(e.message);
             return res.status(400).json({message: 'Book data retrieval error'});
         }
+    };
+
+    async getBookDataByName(req, res) {
+        try {
+            const {title} = req.body;
+            const {Op} = require('sequelize');
+            console.log(title)
+            const book = await Book.findOne({
+                where: {
+                    title: {
+                        [Op.substring] : title
+                    }
+                }
+            });
+            if(!book) {
+                return res.status(400).json({message: 'Book does not exist'});
+            }
+            return res.json(book);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Book data retrieval error'});
+        }
+
     }
 }
 
