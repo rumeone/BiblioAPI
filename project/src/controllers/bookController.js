@@ -72,7 +72,6 @@ class BookController {
         try {
             const {title} = req.body;
             const {Op} = require('sequelize');
-            console.log(title)
             const book = await Book.findOne({
                 where: {
                     title: {
@@ -88,7 +87,27 @@ class BookController {
             console.log(e.message);
             return res.status(400).json({message: 'Book data retrieval error'});
         }
+    };
 
+    async getAvailableBooks(req, res) {
+        try {
+            const {Op} = require('sequelize');
+            const books = await Book.findAll({
+                attributes: ['id','title'],
+                where: {
+                    numberOfCopies: {
+                        [Op.gte]: 1
+                    }
+                }
+            });
+            if(!books) {
+                return res.status(400).json({message: 'Book does not exist'});
+            }
+            return res.json(books);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Book data retrieval error'});
+        }
     }
 }
 
