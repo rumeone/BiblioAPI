@@ -1,4 +1,6 @@
-const {Book, Reader} = require('../models/models');
+const {Book, Reader, ReaderBook} = require('../models/models');
+const {json} = require("express");
+const sequelize = require('../db');
 
 class ReaderController {
     async createReader(req, res) {
@@ -46,6 +48,22 @@ class ReaderController {
         } catch (e) {
             console.log(e.message);
             return res.status(400).json({message: 'Error deleting user'});
+        }
+    };
+
+    async issueBook(req, res) {
+        try {
+            const {idBook, idReader} = req.body;
+            const book = await Book.findByPk(idBook);
+            const reader = await Reader.findByPk(idReader);
+            if (!reader || !book) {
+                return res.status(400).json({message: 'Reader does not exist'});
+            }
+            reader.addBooks(idBook);
+            return res.json(`Reader with id = ${idReader} book added ${book.title}`)
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Error issuing a book to a reader'});
         }
     };
 }

@@ -2,7 +2,7 @@ const {DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
 
-const Book = sequelize.define('book', {
+const Book = sequelize.define('Book', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     title: {type: DataTypes.STRING, allowNull: false},
     author: {type: DataTypes.STRING, allowNull: false},
@@ -11,13 +11,17 @@ const Book = sequelize.define('book', {
     numberOfCopies: {type: DataTypes.INTEGER}
 });
 
-const Reader = sequelize.define('reader', {
+const Reader = sequelize.define('Reader', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     fullName: {type: DataTypes.STRING, allowNull: false},
     birth: {type: DataTypes.DATEONLY, allowNull: false}
 });
 
-Reader.hasMany(Book);
-Book.belongsTo(Reader);
+const ReaderBook = sequelize.define('ReaderBook', {
+});
 
-module.exports = {Book, Reader};
+Reader.belongsToMany(Book, {through: ReaderBook});
+Book.belongsToMany(Reader, {through: ReaderBook});
+
+
+module.exports = {Book, Reader, ReaderBook};
