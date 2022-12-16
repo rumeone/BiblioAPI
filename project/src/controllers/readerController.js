@@ -12,7 +12,6 @@ class ReaderController {
                 res.status(400).json({message: 'No data'});
             }
             const reader = await Reader.create({fullName, birth});
-
             return res.json({reader});
         } catch (e) {
             console.log("Reader creation error: ", e.message)

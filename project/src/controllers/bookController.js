@@ -3,8 +3,8 @@ const {Book, Reader, ReaderBook} = require('../models/models');
 class BookController {
     async createBook(req, res) {
         try {
-            const {id,title,author,vendorCode,year,numberOfCopies} = req.body;
-            const book = await Book.create({id,title,author,vendorCode,year,numberOfCopies});
+            const {title,author,vendorCode,year,numberOfCopies} = req.body;
+            const book = await Book.create({title,author,vendorCode,year,numberOfCopies});
 
             return res.json({book});
         } catch (e) {
@@ -116,6 +116,9 @@ class BookController {
             const issuedBook = await ReaderBook.findAll({
                 attributes: ['BookId']
             });
+            if(!issuedBook) {
+                return res.json("No books released");
+            }
             return res.json(issuedBook);
         } catch (e) {
             console.log(e.message);
