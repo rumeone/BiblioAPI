@@ -104,6 +104,7 @@ class BookController {
             if(!books) {
                 return res.status(400).json({message: 'Book does not exist'});
             }
+            console.log(books);
             return res.json(books);
         } catch (e) {
             console.log(e.message);
