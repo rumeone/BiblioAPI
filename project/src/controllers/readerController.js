@@ -60,7 +60,6 @@ class ReaderController {
                 return res.status(400).json({message: 'Reader does not exist'});
             }
             reader.addBooks(idBook);
-            console.log(book.numberOfCopies);
             await book.update({numberOfCopies: book.numberOfCopies - 1});
             return res.json(`Reader with id = ${idReader} book added ${book.title}`)
         } catch (e) {
@@ -68,6 +67,36 @@ class ReaderController {
             return res.status(400).json({message: 'Error issuing a book to a reader'});
         }
     };
+
+    async returnBook(req, res) {
+        try {
+            const {idReader, idBook} = req.body;
+            const book = await ReaderBook.findOne({
+                where: {
+                    BookId: idBook
+                }
+            });
+            const reader = await ReaderBook.findOne({
+                where: {
+                    ReaderId: idReader
+                }
+            });
+            if (!reader || !book) {
+                return res.status(400).json({message: 'Reader or Book does not exist'});
+            }
+            await ReaderBook.destroy({
+                where: {
+                    ReaderId: idReader,
+                    BookId: idBook
+                }
+            });
+            await book.update({numberOfCopies: book.numberOfCopies + 1});
+            return res.json(`Reader with id = ${idReader} return the book ${idBook}`)
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Error returning a book to a reader'});
+        }
+    }
 }
 
 module.exports = new ReaderController();
