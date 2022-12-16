@@ -1,4 +1,4 @@
-const {Book, Reader} = require('../models/models');
+const {Book, Reader, ReaderBook} = require('../models/models');
 
 class BookController {
     async createBook(req, res) {
@@ -105,6 +105,18 @@ class BookController {
                 return res.status(400).json({message: 'Book does not exist'});
             }
             return res.json(books);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Book data retrieval error'});
+        }
+    };
+
+    async getIssuedBook(req, res) {
+        try {
+            const issuedBook = await ReaderBook.findAll({
+                attributes: ['BookId']
+            });
+            return res.json(issuedBook);
         } catch (e) {
             console.log(e.message);
             return res.status(400).json({message: 'Book data retrieval error'});
