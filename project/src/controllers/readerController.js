@@ -60,6 +60,8 @@ class ReaderController {
                 return res.status(400).json({message: 'Reader does not exist'});
             }
             reader.addBooks(idBook);
+            console.log(book.numberOfCopies);
+            await book.update({numberOfCopies: book.numberOfCopies - 1});
             return res.json(`Reader with id = ${idReader} book added ${book.title}`)
         } catch (e) {
             console.log(e.message);
