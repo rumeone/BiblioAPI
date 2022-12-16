@@ -55,6 +55,7 @@ class BookController {
     async getBookDataById(req, res) {
         try {
             const {id} = req.params;
+            console.log(id);
             const book = await Book.findOne({
                 where: {id: id}
             });

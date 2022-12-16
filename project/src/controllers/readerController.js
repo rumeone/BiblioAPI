@@ -1,6 +1,7 @@
 const {Book, Reader, ReaderBook} = require('../models/models');
 const {json} = require("express");
 const sequelize = require('../db');
+const {stringify} = require("nodemon/lib/utils");
 
 class ReaderController {
     async createReader(req, res) {
@@ -96,7 +97,58 @@ class ReaderController {
             console.log(e.message);
             return res.status(400).json({message: 'Error returning a book to a reader'});
         }
-    }
+    };
+
+    async getDataById(req, res) {
+        try {
+            const {id} = req.params;
+            console.log(id);
+            const reader = await Reader.findOne({
+                where: {
+                    id: id
+                }
+            });
+            if(!reader) {
+                return res.status(400).json({message: 'Reader does not exist'});
+            }
+            return res.json(reader);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Reader data retrieval error'});
+        }
+    };
+
+    async getDataByName(req, res) {
+        try {
+            const {fullName} = req.body;
+            const {Op} = require('sequelize');
+            const reader = await Reader.findOne({
+                attributes: ['id', 'fullName', 'birth'],
+                where: {
+                    fullName: {
+                        [Op.substring]: fullName
+                    }
+                }
+            });
+            const bookReader = await ReaderBook.findAll({
+                attributes: ['BookId'],
+                where: {
+                    ReaderId: reader.id
+                }
+            });
+            const result = {
+                reader,
+                bookReader
+            };
+            if(!reader) {
+                return res.status(400).json({message: 'Reader does not exist'});
+            }
+            return res.json(result);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(400).json({message: 'Reader data retrieval error'});
+        }
+    };
 }
 
 module.exports = new ReaderController();
